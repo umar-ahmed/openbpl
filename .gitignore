@@ -30,3 +30,12 @@ go.work.sum
 # Editor/IDE
 # .idea/
 .vscode/
+
+tmp/
+build/
+*.log
+.env
+.env.local
+.env.production
+coverage.html
+coverage.out

@@ -50,3 +50,35 @@ func Logger(next http.Handler) http.Handler {
 		)
 	})
 }
+
+func CORS(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Access-Control-Allow-Origin", "*")                                // Allow all origins
+		w.Header().Set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS") // Allowed HTTP methods
+		w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")     // Allowed headers
+		if r.Method == "OPTIONS" {
+			w.WriteHeader(http.StatusOK) // Return 200 OK
+			return                       // Don't call the next handler - this is just a preflight check
+		}
+
+		// For non-OPTIONS requests, continue to the next handler
+		next.ServeHTTP(w, r)
+	})
+}
+
+func Recovery(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		defer func() {
+			// recover() captures any panic that occurred
+			// If no panic occurred, recover() returns nil
+			if err := recover(); err != nil {
+				log.Printf("Panic recovered: %v", err) // Log the panic
+				http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+			}
+		}()
+
+		// Call the next handler
+		// If this panics, the defer function above will catch it
+		next.ServeHTTP(w, r)
+	})
+}

@@ -10,8 +10,10 @@ import (
 	"time"
 
 	"openbpl/internal/config"
+	"openbpl/internal/database"
 	"openbpl/internal/handlers"
 	"openbpl/internal/middleware"
+	"openbpl/pkg/models"
 )
 
 func main() {
@@ -21,9 +23,20 @@ func main() {
 	log.Printf("📋 Environment: %s", cfg.Environment)
 	log.Printf("🌐 Port: %s", cfg.Port)
 
+	db, err := database.Connect(cfg.DatabaseURL)
+	if err != nil {
+		log.Fatal("❌ Failed to connect to database:", err)
+	}
+	defer db.Close()
+
+	userRepo := models.NewUserRepository(db.DB)
+	threatRepo := models.NewThreatRepository(db.DB)
+
+	dbHandlers := handlers.NewDatabaseHandlers(userRepo, threatRepo)
+
 	mux := http.NewServeMux()
 
-	setupRoutes(mux)
+	setupRoutes(mux, dbHandlers)
 
 	server := &http.Server{
 		Addr:         cfg.Port,
@@ -38,6 +51,10 @@ func main() {
 		log.Printf("📖 Available endpoints:")
 		log.Printf("   GET  %s/health - Health check", cfg.Port)
 		log.Printf("   GET  %s/api/v1/status - Status info", cfg.Port)
+		log.Printf("   GET  %s/api/v1/users - List users", cfg.Port)
+		log.Printf("   GET  %s/api/v1/users/{id} - Get user by ID", cfg.Port)
+		log.Printf("   GET  %s/api/v1/threats - List threats", cfg.Port)
+		log.Printf("   GET  %s/api/v1/threats/{id} - Get threat by ID", cfg.Port)
 		log.Printf("   GET  %s/ - Home page", cfg.Port)
 
 		if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
@@ -61,10 +78,15 @@ func main() {
 	log.Println("✅ Server stopped gracefully")
 }
 
-func setupRoutes(mux *http.ServeMux) {
+func setupRoutes(mux *http.ServeMux, dbHandlers *handlers.DatabaseHandlers) {
 	mux.HandleFunc("GET /health", handlers.Health)
 
 	mux.HandleFunc("GET /api/v1/status", handlers.Status)
+
+	mux.HandleFunc("GET /api/v1/users", dbHandlers.ListUsers)
+	mux.HandleFunc("GET /api/v1/users/{id}", dbHandlers.GetUser)
+	mux.HandleFunc("GET /api/v1/threats", dbHandlers.ListThreats)
+	mux.HandleFunc("GET /api/v1/threats/{id}", dbHandlers.GetThreat)
 
 	mux.Handle("GET /static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./static"))))
 

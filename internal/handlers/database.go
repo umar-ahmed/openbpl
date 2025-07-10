@@ -9,13 +9,24 @@ import (
 )
 
 // DatabaseHandlers holds repository dependencies
+type UserRepositoryInterface interface {
+	GetAll() ([]models.User, error)
+	GetByID(id int) (*models.User, error)
+}
+
+type ThreatRepositoryInterface interface {
+	GetAll() ([]models.Threat, error)
+	GetByID(id int) (*models.Threat, error)
+}
+
+// DatabaseHandlers holds repository dependencies
 type DatabaseHandlers struct {
-	UserRepo   *models.UserRepository
-	ThreatRepo *models.ThreatRepository
+	UserRepo   UserRepositoryInterface   // instead of *models.UserRepository
+	ThreatRepo ThreatRepositoryInterface // instead of *models.ThreatRepository
 }
 
 // NewDatabaseHandlers creates new database handlers
-func NewDatabaseHandlers(userRepo *models.UserRepository, threatRepo *models.ThreatRepository) *DatabaseHandlers {
+func NewDatabaseHandlers(userRepo UserRepositoryInterface, threatRepo ThreatRepositoryInterface) *DatabaseHandlers {
 	return &DatabaseHandlers{
 		UserRepo:   userRepo,
 		ThreatRepo: threatRepo,

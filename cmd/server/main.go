@@ -66,14 +66,8 @@ func setupRoutes(mux *http.ServeMux) {
 
 	mux.HandleFunc("GET /api/v1/status", handlers.Status)
 
-	staticHandler := http.StripPrefix("/static/", http.FileServer(http.Dir("./static")))
-	mux.HandleFunc("GET /static/{file...}", func(w http.ResponseWriter, r *http.Request) {
-		staticHandler.ServeHTTP(w, r)
-	})
-	mux.HandleFunc("HEAD /static/{file...}", func(w http.ResponseWriter, r *http.Request) {
-		staticHandler.ServeHTTP(w, r)
-	})
+	mux.Handle("GET /static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./static"))))
 
-	mux.HandleFunc("GET /", handlers.Home)
+	mux.HandleFunc("GET /{$}", handlers.Home)
 	mux.HandleFunc("/{path...}", handlers.NotFound)
 }

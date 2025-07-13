@@ -210,6 +210,23 @@ OpenBPL (Open Brand Protection Library) is an open-source framework for monitori
 - **Risk Score**: A numerical value assigned to a threat based on its potential impact and likelihood of being a genuine infringement.
 - **Label**: A tag or category assigned to a threat to classify it based on its nature (e.g., phishing, counterfeit, impersonation).
 
+## 7.2 Entity Relationship Diagram (ERD)
+
+```mermaid
+---
+title: ER Diagram for OpenBPL
+---
+
+erDiagram
+    Workspace {
+        string id PK "Unique identifier for the workspace"
+        string name "Name of the workspace"
+        string description "Description of the workspace"
+        string created_at "Timestamp of creation"
+        string updated_at "Timestamp of last update"
+    }
+```
+
 # 8. Success Metrics
 
 - Detection Rate: % of threats correctly identified.

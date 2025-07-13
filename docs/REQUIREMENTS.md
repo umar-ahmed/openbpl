@@ -225,6 +225,16 @@ erDiagram
         string created_at "Timestamp of creation"
         string updated_at "Timestamp of last update"
     }
+    Brand ||--o Workspace : belongs_to
+    Brand {
+        string id PK "Unique identifier for the brand"
+        string workspace_id FK "Reference to the workspace"
+        string name "Name of the brand"
+        string description "Description of the brand"
+        string logo_url "URL of the brand logo"
+        string created_at "Timestamp of creation"
+        string updated_at "Timestamp of last update"
+    }
 ```
 
 # 8. Success Metrics

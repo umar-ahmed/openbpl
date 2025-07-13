@@ -192,7 +192,25 @@ OpenBPL (Open Brand Protection Library) is an open-source framework for monitori
 - Enable analysts to review and approve automated takedown requests before sending.
 - Implement a refiling mechanism for takedown requests that were not successful.
 
-# 7. Success Metrics
+# 7. Data Model
+
+## 7.1 Glossary
+
+- **Workspace**: A logical grouping of brands and their associated data, allowing for multi-brand management.
+- **Brand**: A collection of assets (logos, trademarks, keywords, domains, social media profiles, etc.) associated with a company or product.
+- **Threat**: An identified potential infringement or violation of brand assets, which may require action.
+- **Detection Source**: A source from which threats are detected, such as social media, domains, certificates, marketplaces, etc.
+- **Detection Rule**: A set of conditions and actions defined to identify threats based on specific criteria.
+- **Enrichment**: The process of gathering additional data about a threat, such as metadata, screenshots, and historical logs.
+- **Enforcement**: The actions taken to address a threat, such as sending takedown requests or blocking access.
+- **Takedown Request**: A formal request sent to a hosting provider or platform to remove or disable access to infringing content.
+- **Allowlist/Blocklist Request**: A request to add a domain or URL to a blocklist to prevent future access or visibility.
+- **False Positive**: A threat that is incorrectly identified, leading to unnecessary actions or investigations.
+- **Platform**: A digital space where threats can be detected, such as social media platforms, marketplaces, or web domains.
+- **Risk Score**: A numerical value assigned to a threat based on its potential impact and likelihood of being a genuine infringement.
+- **Label**: A tag or category assigned to a threat to classify it based on its nature (e.g., phishing, counterfeit, impersonation).
+
+# 8. Success Metrics
 
 - Detection Rate: % of threats correctly identified.
 - Takedown Efficiency: Time taken from detection to removal.
@@ -203,7 +221,7 @@ OpenBPL (Open Brand Protection Library) is an open-source framework for monitori
 - Integration Success: Number of successful third-party integrations (e.g., webhooks, email notifications).
 - Compliance: Adherence to legal and security standards.
 
-# 8. Open Questions
+# 9. Open Questions
 
 1. How to ensure scalability for large-scale monitoring while keeping things easily self-hostable?
 2. What customization options should be offered for enforcement workflows?

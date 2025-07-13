@@ -39,3 +39,5 @@ build/
 .env.production
 coverage.html
 coverage.out
+
+openbpl.yaml

@@ -225,7 +225,7 @@ erDiagram
         string created_at "Timestamp of creation"
         string updated_at "Timestamp of last update"
     }
-    Workspace ||--|{ Brand : contains
+    Workspace ||--o{ Brand : contains
     Brand {
         string id PK "Unique identifier for the brand"
         string workspace_id FK "Reference to the workspace"
